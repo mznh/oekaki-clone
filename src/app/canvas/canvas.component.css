@@ -1,0 +1,13 @@
+.mainCanvas {
+  text-align: center;
+  padding: 20px;
+}
+.mainCanvas canvas {
+  border: 1px #ccc solid;
+}
+.btn {
+  text-align: center;
+}
+.btn button {
+  border: 1px #ccc solid;
+}
