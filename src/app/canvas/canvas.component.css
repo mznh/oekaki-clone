@@ -1,9 +1,28 @@
+.canvas-tool{
+  display: grid;
+  grid-template-rows: 500px;
+  grid-template-columns: 680px 300px;
+}
+
 .mainCanvas {
-  text-align: center;
-  padding: 20px;
+  grid-row: 1 / 2;
+  grid-column: 1 / 2;
+
+	position: relative;
+  margin: 20px;
 }
 .mainCanvas canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
   border: 1px #ccc solid;
+}
+.mainTool{
+  grid-row: 1 / 2;
+  grid-column: 2 / 3;
+
+	position: relative;
+  margin: 20px;
 }
 .btn {
   text-align: center;

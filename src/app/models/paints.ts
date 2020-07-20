@@ -19,20 +19,29 @@ export class Point{
 }
 
 
+export const enum StrokeType{ WRITE, CLEAR, UNDO, REDO }
+
 export interface StrokePacket{
-  line?: {x:number, y:number}[]
-  color?: Color // ここも後々websocketに合わせて修正
+  line?: {x:number, y:number}[],
+  color?: Color, // ここも後々websocketに合わせて修正
+  strokeType?: StrokeType
 }
 
 export class Stroke{
   public line: Point[];
   public color: Color;
+  public strokeType: StrokeType;
   constructor(){
     this.line = [];
+    this.strokeType = StrokeType.WRITE;
+  }
+  public setStrokeType(t:StrokeType){
+    this.strokeType = t;
   }
   public addPoint(p:Point){
     this.line.push(p);
   }
+  //[0,1,2,3] -> [(0,1),(1,2),(2,3)]
   public pairLines(){
     const pres = this.line.slice(1);
     const sucs = this.line.slice(0,-1);
@@ -59,16 +68,16 @@ export class Brush{
   public isTouch: boolean;
   constructor(){
   }
-  public putIn(x:number, y:number){
-    this.start = new Point(x,y); 
+  public putIn(p:Point){
+    this.start = p; 
     this.isTouch = true;
   }
-  public putOut(x:number, y:number){
-    this.end = new Point(x,y); 
+  public putOut(p:Point){
+    this.end = p; 
     this.isTouch = false;
   }
-  public setBefore(x:number, y:number){
-    this.before = new Point(x,y); 
+  public setBefore(p:Point){
+    this.before = p; 
   }
 }
 

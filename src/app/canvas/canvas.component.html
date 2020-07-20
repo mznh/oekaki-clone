@@ -1,5 +1,11 @@
 <p>canvas works!</p>
 
-<div class="mainCanvas">
-  <canvas #canvasField width="600" height="400"></canvas>
+<div class="canvas-tool">
+  <div class="mainCanvas">
+    <canvas #canvasField id="main-canvas"[width]="CANVAS_SIZE_WIDTH" [height]="CANVAS_SIZE_HEIGHT"></canvas>
+    <canvas #temporaryField id="tmp-canvas" [width]="CANVAS_SIZE_WIDTH" [height]="CANVAS_SIZE_HEIGHT"></canvas>
+  </div>
+  <div class="mainTool">
+    <button mat-button (click)="clearCanvas()">全消し</button>
+  </div>
 </div>

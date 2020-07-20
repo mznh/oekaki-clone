@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { webSocket } from "rxjs/webSocket";
-import { Paint, Stroke , Point, Color, Brush, StrokePacket } from '../models/paints';
+import { Paint, Stroke , Point, Color, Brush, StrokePacket, StrokeType } from '../models/paints';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +12,15 @@ export class ConnectService {
   public paintStream = new Subject<Stroke>();
   //サーバーからの入力（全体の情報が流れるストリーム）
   public webStream = webSocket("ws://localhost:3000");
+  
   constructor() {
     console.log("service constructor called");
+    //手元のユーザーからの入力をそのままwebsocketに流す
     this.paintStream.subscribe(
       x => {
         this.webStream.next(x)
       }
     );
-     
-  
   }
 
   // サーバーへ一筆送信  
@@ -39,9 +39,11 @@ export class ConnectService {
 
   private shapeStroke(v:StrokePacket){
     let st = new Stroke();
+    console.log(v)
     v.line.map(p => {
       st.addPoint(new Point(p.x,p.y))
     });
+    st.setStrokeType(v.strokeType);
     return st;
   }
 }
