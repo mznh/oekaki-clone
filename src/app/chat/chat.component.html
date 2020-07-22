@@ -1,4 +1,12 @@
 <p>chat works!</p>
-<input matInput #chatInput 
-  type="text" 
-  (keyup.enter)="getEnter()">
+<div class="chat-input-form">
+  <input matInput #chatInput 
+    type="text" 
+    (keyup.enter)="getEnter()">
+</div>
+<div class="chat-message-field">
+  <div *ngFor="let msg of chatLog">
+    {{msg}}
+  </div>
+</div>
+

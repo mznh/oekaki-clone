@@ -1,5 +1,5 @@
 import { Component, OnInit, OnChanges, AfterViewInit, DoCheck, ViewChild, HostListener } from '@angular/core';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { Observable, Subject } from 'rxjs';
 import { Paint, Stroke , Point, Color, Brush,StrokeType } from '../models/paints';
 import { MouseAction} from '../models/mouse';
@@ -14,13 +14,13 @@ import { ConnectService } from '../service/connect.service';
 export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
   @ViewChild('canvasField') myCanvasComp; // 
   @ViewChild('temporaryField') tmpCanvasComp; //
+  //メインキャンバス
   public canvas: HTMLCanvasElement = null; // canvasを宣言
   public ctx: CanvasRenderingContext2D = null; // contextを宣言
-  //入力途中用のcanvas
+  //入力途中用キャンバス
   public tmpCanvas: HTMLCanvasElement = null; // canvasを宣言
   public tmpCtx: CanvasRenderingContext2D = null; // contextを宣言
 
-  public paintStream: Subject<Stroke>;
   public canvasStream: Observable<Stroke>;
   public brush: Brush;
   public paint: Paint;
@@ -30,8 +30,7 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
   constructor(private connectService: ConnectService) { 
     this.brush = new Brush();
     this.paint = new Paint();
-    this.paintStream = this.connectService.paintStream;
-    this.canvasStream = this.connectService.canvasStream();
+    this.canvasStream = this.connectService.strokeStream();
     this.CANVAS_SIZE_HEIGHT = 400;
     this.CANVAS_SIZE_WIDTH = 600;
   }
@@ -93,7 +92,7 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
       this.brush.putOut(mousePoint);
       this.strokeNow.setStrokeType(StrokeType.WRITE)
       // 一筆をストリームへ流す
-      this.paintStream.next(this.strokeNow);
+      this.connectService.sendStroke(this.strokeNow);
     } 
   }
 
@@ -122,7 +121,10 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
         }
         //入力中の画面を削除
         this.tmpCtx.clearRect(0, 0, this.tmpCanvas.width, this.tmpCanvas.height);
-      }
+      },
+    error =>{
+      console.log(error);
+    }
     );
   }
 
@@ -148,8 +150,7 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
     console.log("clear");
     let st = new Stroke();
     st.setStrokeType(StrokeType.CLEAR);
-    this.paintStream.next(st);
-
+    this.connectService.sendStroke(st);
   }
 
 }

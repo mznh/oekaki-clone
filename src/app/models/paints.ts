@@ -19,21 +19,28 @@ export class Point{
 }
 
 
-export const enum StrokeType{ WRITE, CLEAR, UNDO, REDO }
+export const enum StrokeType{ WRITE, CLEAR, UNDO, REDO, OPERATION }
 
 export interface StrokePacket{
+  strokeType?: StrokeType,
   line?: {x:number, y:number}[],
   color?: Color, // ここも後々websocketに合わせて修正
-  strokeType?: StrokeType
+  message?: string
 }
 
 export class Stroke{
+  public strokeType: StrokeType;
   public line: Point[];
   public color: Color;
-  public strokeType: StrokeType;
-  constructor(){
+  public message: string;
+  constructor(msg? : string){
     this.line = [];
-    this.strokeType = StrokeType.WRITE;
+    if(msg){
+      this.strokeType = StrokeType.OPERATION;
+      this.message = msg;
+    }else{
+      this.strokeType = StrokeType.WRITE;
+    }
   }
   public setStrokeType(t:StrokeType){
     this.strokeType = t;
