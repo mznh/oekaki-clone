@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { webSocket } from "rxjs/webSocket";
+import { environment } from '../../environments/environment';
 import { Paint, Stroke , Point, Color, Brush, StrokePacket, StrokeType } from '../models/paints';
 
 @Injectable({
@@ -11,7 +12,7 @@ export class ConnectService {
   //手前の入力が流れるストリーム
   public paintStream = new Subject<Stroke>();
   //サーバーからの入力（全体の情報が流れるストリーム）
-  public webStream = webSocket("ws://localhost:3000");
+  public webStream = webSocket("ws://"+location.hostname+":3000");
   
   constructor() {
     console.log("service constructor called");

@@ -1,4 +1,5 @@
 import { Component, OnInit, OnChanges, AfterViewInit, DoCheck, ViewChild, HostListener } from '@angular/core';
+import {MatButtonModule} from '@angular/material/button';
 import { Observable, Subject } from 'rxjs';
 import { Paint, Stroke , Point, Color, Brush,StrokeType } from '../models/paints';
 import { MouseAction} from '../models/mouse';
@@ -47,6 +48,9 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
            (0 <= p.y) && (p.y <= this.CANVAS_SIZE_HEIGHT)
   }
 
+
+
+  // 線を引くのはマウスイベントで表現 
   @HostListener('mousedown', ['$event']) 
 	public downCanvas (target: any) {
     console.log("press");
@@ -139,21 +143,6 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
     this.tmpCtx = this.tmpCanvas.getContext( '2d' );
   }
 
-  //public paintCanvas(){
-  //  this.paint.strokes.map(st =>{
-  //    st.pairLines().map(pair =>{ 
-  //      console.log("this1");
-  //      const pre = pair[0];
-  //      const suc = pair[1];
-  //      console.log(pre,suc);
-  //      this.ctx.beginPath();
-  //      this.ctx.moveTo(pre.x,pre.y);
-  //      this.ctx.lineTo(suc.x,suc.y);
-  //      this.ctx.stroke();
-  //    });
-  //  }
-  //  );
-	//}
 
   public clearCanvas(){
     console.log("clear");
