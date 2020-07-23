@@ -7,6 +7,9 @@ export class Color{
     this.green = green;
     this.blue = blue;
   }
+  public getCanvasString(){
+    return `rgb(${this.red},${this.green},${this.blue})`;
+  }
 }
 
 export class Point{
@@ -24,6 +27,7 @@ export const enum ActionType{ WRITE, CLEAR, UNDO, REDO, OPERATION }
 export interface ActionPacket{
   actionType?: ActionType,
   line?: {x:number, y:number}[],
+  lineWidth?: number,
   color?: Color, // ここも後々websocketに合わせて修正
   message?: string
 }
@@ -31,6 +35,7 @@ export interface ActionPacket{
 export class Action{
   public actionType: ActionType;
   public line: Point[];
+  public lineWidth: number;
   public color: Color;
   public message: string;
   constructor(msg? : string){
@@ -40,6 +45,7 @@ export class Action{
       this.message = msg;
     }else{
       this.actionType = ActionType.WRITE;
+      this.lineWidth = 1;
     }
   }
   public setActionType(t:ActionType){
@@ -56,8 +62,15 @@ export class Action{
       return [e, sucs[i]];
     });
   }
+  public setColor(c:Color){
+    this.color = c;
+  }
+  public setWidth(n: number){
+    this.lineWidth = n;
+  }
 }
 
+//現在は未使用
 export class Paint{
   public actions: Action[];
   constructor(){
@@ -73,7 +86,10 @@ export class Brush{
   public end: Point;
   public before: Point;
   public isTouch: boolean;
+  public color: Color;
+  public lineWidth: number;
   constructor(){
+    this.color = new Color(0,0,0);
   }
   public putIn(p:Point){
     this.start = p; 
@@ -85,6 +101,12 @@ export class Brush{
   }
   public setBefore(p:Point){
     this.before = p; 
+  }
+  public setColor(c: Color){
+    this.color = c;
+  }
+  public getColor(){
+    return this.color.getCanvasString();
   }
 }
 

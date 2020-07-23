@@ -64,7 +64,10 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
       this.brush.putIn(mousePoint);
       this.brush.setBefore(mousePoint);
       
+      //ブラシの諸情報をActionへ入力
       this.actionNow = new Action();
+      this.actionNow.setColor(this.brush.color);
+      this.actionNow.lineWidth = this.brush.lineWidth;
       this.actionNow.addPoint(mousePoint);
     }
   }
@@ -75,6 +78,8 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
     if(this.brush.isTouch){
       this.actionNow.addPoint(mousePoint);
       const beforePoint = this.brush.before;
+      this.tmpCtx.strokeStyle = this.brush.getColor();
+      this.tmpCtx.lineWidth = this.brush.lineWidth;
       this.tmpCtx.beginPath();
       this.tmpCtx.moveTo(mousePoint.x,mousePoint.y);
       this.tmpCtx.lineTo(beforePoint.x,beforePoint.y);
@@ -99,29 +104,8 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
 
   ngOnInit(): void {
     this.canvasStream.subscribe(
-      //1 action毎の処理
-      action => {
-        switch(action.actionType){
-          case ActionType.WRITE:
-            action.pairLines().map(pair =>{ 
-              const pre = pair[0];
-              const suc = pair[1];
-              //console.log(pre,suc);
-              this.ctx.beginPath();
-              this.ctx.moveTo(pre.x,pre.y);
-              this.ctx.lineTo(suc.x,suc.y);
-              this.ctx.stroke(); 
-            })
-            break;
-          case ActionType.CLEAR:
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            break;
-          default:
-            break;
-        }
-        //入力中の画面を削除
-        this.tmpCtx.clearRect(0, 0, this.tmpCanvas.width, this.tmpCanvas.height);
-      },
+      //action毎の処理
+      action => { return this.execAction(this.canvas,this.ctx,this.tmpCanvas,this.tmpCtx,action);},
     error =>{
       console.log(error);
     }
@@ -145,12 +129,54 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
     this.tmpCtx = this.tmpCanvas.getContext( '2d' );
   }
 
+  //内部でキャンバス再現に使用するツール群
+  private execAction(
+    mainCanvas: HTMLCanvasElement,
+    mainCtx: CanvasRenderingContext2D,
+    tmpCanvas: HTMLCanvasElement,
+    tmpCtx: CanvasRenderingContext2D,
+    action: Action){
+      switch(action.actionType){
+        case ActionType.WRITE:
+          action.pairLines().map(pair =>{ 
+            const pre = pair[0];
+            const suc = pair[1];
+            //console.log(pre,suc);
+            mainCtx.strokeStyle = action.color.getCanvasString();
+            mainCtx.lineWidth = action.lineWidth;
+            mainCtx.beginPath();
+            mainCtx.moveTo(pre.x,pre.y);
+            mainCtx.lineTo(suc.x,suc.y);
+            mainCtx.stroke(); 
+          })
+          break;
+        case ActionType.CLEAR:
+          mainCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+          break;
+        default:
+          break;
+      }
+      //入力中の画面を削除
+      tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+  }
 
+  
+  // 外から叩かれるツール群
   public clearCanvas(){
     console.log("clear");
     let st = new Action();
     st.setActionType(ActionType.CLEAR);
     this.connectService.sendAction(st);
+  }
+  public changeColor(r:number, g:number, b:number){
+    console.log("change color");
+    const c = new Color(r,g,b);
+    console.log(c);
+    this.brush.setColor(c);
+  }
+  public changeLineWidth(n: number){
+    console.log("change lineWidth");
+    this.brush.lineWidth = n;
   }
 
 }
