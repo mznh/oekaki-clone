@@ -19,31 +19,31 @@ export class Point{
 }
 
 
-export const enum StrokeType{ WRITE, CLEAR, UNDO, REDO, OPERATION }
+export const enum ActionType{ WRITE, CLEAR, UNDO, REDO, OPERATION }
 
-export interface StrokePacket{
-  strokeType?: StrokeType,
+export interface ActionPacket{
+  actionType?: ActionType,
   line?: {x:number, y:number}[],
   color?: Color, // ここも後々websocketに合わせて修正
   message?: string
 }
 
-export class Stroke{
-  public strokeType: StrokeType;
+export class Action{
+  public actionType: ActionType;
   public line: Point[];
   public color: Color;
   public message: string;
   constructor(msg? : string){
     this.line = [];
     if(msg){
-      this.strokeType = StrokeType.OPERATION;
+      this.actionType = ActionType.OPERATION;
       this.message = msg;
     }else{
-      this.strokeType = StrokeType.WRITE;
+      this.actionType = ActionType.WRITE;
     }
   }
-  public setStrokeType(t:StrokeType){
-    this.strokeType = t;
+  public setActionType(t:ActionType){
+    this.actionType = t;
   }
   public addPoint(p:Point){
     this.line.push(p);
@@ -59,12 +59,12 @@ export class Stroke{
 }
 
 export class Paint{
-  public strokes: Stroke[];
+  public actions: Action[];
   constructor(){
-    this.strokes = [];
+    this.actions = [];
   }
-  public addStroke(s:Stroke){
-    this.strokes.push(s);
+  public addAction(s:Action){
+    this.actions.push(s);
   }
 }
 

@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CanvasComponent } from './canvas/canvas.component';
 import { ConnectService } from './service/connect.service';
-import { Paint, Stroke, Point, Color, Brush } from './models/paints';
+import { Paint, Action, Point, Color, Brush } from './models/action';
 import { ChatComponent } from './chat/chat.component';
 
 

@@ -3,7 +3,7 @@ import { MatInputModule } from '@angular/material/input';
 import { Observable, Subject } from 'rxjs';
 
 import { ConnectService } from '../service/connect.service';
-import { Paint, Stroke , Point, Color, Brush,StrokeType } from '../models/paints';
+import { Paint, Action , Point, Color, Brush,ActionType } from '../models/action';
 
 @Component({
   selector: 'app-chat',
@@ -12,7 +12,7 @@ import { Paint, Stroke , Point, Color, Brush,StrokeType } from '../models/paints
 })
 export class ChatComponent implements OnInit {
   @ViewChild('chatInput') inputForm; // 
-  public operationStream: Observable<Stroke>;
+  public operationStream: Observable<Action>;
   public chatLog : string[];
 
 
@@ -39,7 +39,7 @@ export class ChatComponent implements OnInit {
     const inputAnswer = elm.value;
     console.log(inputAnswer);
     elm.value = "";
-    this.connectService.sendStroke(new Stroke(inputAnswer));
+    this.connectService.sendAction(new Action(inputAnswer));
   }
 
 }

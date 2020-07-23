@@ -3,7 +3,7 @@ import { Observable, Subject } from 'rxjs';
 import { map, filter } from 'rxjs/operators';
 import { webSocket } from "rxjs/webSocket";
 import { environment } from '../../environments/environment';
-import { Paint, Stroke , Point, Color, Brush, StrokePacket, StrokeType } from '../models/paints';
+import { Paint, Action , Point, Color, Brush, ActionPacket, ActionType } from '../models/action';
 
 @Injectable({
   providedIn: 'root'
@@ -17,16 +17,16 @@ export class ConnectService {
   }
 
   // サーバーへ一筆送信  
-  public sendStroke(st: Stroke){
+  public sendAction(st: Action){
     this.webStream.next(st);
   }
 
-  //websocketのストリームをstrokeのそれに変換
-  public strokeStream(){
+  //websocketのストリームをactionのそれに変換
+  public actionStream(){
     return this.webStream.pipe(map(v => {
       console.log("get web socket");
-      console.log(this.shapeStroke(v));
-      return this.shapeStroke(v);
+      console.log(this.shapeAction(v));
+      return this.shapeAction(v);
     }));
   }
 
@@ -34,9 +34,9 @@ export class ConnectService {
   public operateStream(){
     return this.webStream.pipe(
       map(v => {
-        return this.shapeStroke(v);
+        return this.shapeAction(v);
       }),
-      filter(v => v.strokeType === StrokeType.OPERATION),
+      filter(v => v.actionType === ActionType.OPERATION),
       //for debug 
       map(v =>{
         console.log("recieved operate packet");
@@ -45,18 +45,18 @@ export class ConnectService {
       );
   }
 
-  //ストリームのjsonをstrokeに変換
-  private shapeStroke(v:StrokePacket){
-    let st = new Stroke();
+  //ストリームのjsonをactionに変換
+  private shapeAction(v:ActionPacket){
+    let st = new Action();
     console.log(v)
-    st.setStrokeType(v.strokeType);
-    switch(v.strokeType){
-      case StrokeType.WRITE:
+    st.setActionType(v.actionType);
+    switch(v.actionType){
+      case ActionType.WRITE:
         v.line.map(p => { st.addPoint(new Point(p.x,p.y)) });
         break;
-      case StrokeType.CLEAR:
+      case ActionType.CLEAR:
         break;
-      case StrokeType.OPERATION:
+      case ActionType.OPERATION:
         st.message = v.message;
         break;
       default:

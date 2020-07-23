@@ -1,7 +1,7 @@
 import { Component, OnInit, OnChanges, AfterViewInit, DoCheck, ViewChild, HostListener } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Observable, Subject } from 'rxjs';
-import { Paint, Stroke , Point, Color, Brush,StrokeType } from '../models/paints';
+import { Paint, Action , Point, Color, Brush,ActionType } from '../models/action';
 import { MouseAction} from '../models/mouse';
 import { ConnectService } from '../service/connect.service';
 
@@ -21,16 +21,16 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
   public tmpCanvas: HTMLCanvasElement = null; // canvasを宣言
   public tmpCtx: CanvasRenderingContext2D = null; // contextを宣言
 
-  public canvasStream: Observable<Stroke>;
+  public canvasStream: Observable<Action>;
   public brush: Brush;
   public paint: Paint;
-  public strokeNow: Stroke;
+  public actionNow: Action;
   public CANVAS_SIZE_HEIGHT:number;
   public CANVAS_SIZE_WIDTH:number;
   constructor(private connectService: ConnectService) { 
     this.brush = new Brush();
     this.paint = new Paint();
-    this.canvasStream = this.connectService.strokeStream();
+    this.canvasStream = this.connectService.actionStream();
     this.CANVAS_SIZE_HEIGHT = 400;
     this.CANVAS_SIZE_WIDTH = 600;
   }
@@ -64,8 +64,8 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
       this.brush.putIn(mousePoint);
       this.brush.setBefore(mousePoint);
       
-      this.strokeNow = new Stroke();
-      this.strokeNow.addPoint(mousePoint);
+      this.actionNow = new Action();
+      this.actionNow.addPoint(mousePoint);
     }
   }
 
@@ -73,7 +73,7 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
 	public moveCanvas (target: any) {
     const mousePoint = this.getCanvasPoint(target);
     if(this.brush.isTouch){
-      this.strokeNow.addPoint(mousePoint);
+      this.actionNow.addPoint(mousePoint);
       const beforePoint = this.brush.before;
       this.tmpCtx.beginPath();
       this.tmpCtx.moveTo(mousePoint.x,mousePoint.y);
@@ -90,20 +90,20 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
     const mousePoint = this.getCanvasPoint(target);
     if(this.brush.isTouch && this.checkInCanvas(mousePoint)){
       this.brush.putOut(mousePoint);
-      this.strokeNow.setStrokeType(StrokeType.WRITE)
+      this.actionNow.setActionType(ActionType.WRITE)
       // 一筆をストリームへ流す
-      this.connectService.sendStroke(this.strokeNow);
+      this.connectService.sendAction(this.actionNow);
     } 
   }
 
 
   ngOnInit(): void {
     this.canvasStream.subscribe(
-      //1 stroke毎の処理
-      stroke => {
-        switch(stroke.strokeType){
-          case StrokeType.WRITE:
-            stroke.pairLines().map(pair =>{ 
+      //1 action毎の処理
+      action => {
+        switch(action.actionType){
+          case ActionType.WRITE:
+            action.pairLines().map(pair =>{ 
               const pre = pair[0];
               const suc = pair[1];
               //console.log(pre,suc);
@@ -113,7 +113,7 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
               this.ctx.stroke(); 
             })
             break;
-          case StrokeType.CLEAR:
+          case ActionType.CLEAR:
             this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
             break;
           default:
@@ -148,9 +148,9 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
 
   public clearCanvas(){
     console.log("clear");
-    let st = new Stroke();
-    st.setStrokeType(StrokeType.CLEAR);
-    this.connectService.sendStroke(st);
+    let st = new Action();
+    st.setActionType(ActionType.CLEAR);
+    this.connectService.sendAction(st);
   }
 
 }
