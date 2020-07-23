@@ -25,7 +25,7 @@ export class ConnectService {
   public actionStream(){
     return this.webStream.pipe(map(v => {
       console.log("get web socket");
-      console.log(this.shapeAction(v));
+      //console.log(this.shapeAction(v));
       return this.shapeAction(v);
     }));
   }
@@ -48,7 +48,6 @@ export class ConnectService {
   //ストリームのjsonをactionに変換
   private shapeAction(v:ActionPacket){
     let st = new Action();
-    console.log(v)
     st.setActionType(v.actionType);
     switch(v.actionType){
       case ActionType.WRITE:
