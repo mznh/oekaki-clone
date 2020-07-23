@@ -69,6 +69,7 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
       this.actionNow.setColor(this.brush.color);
       this.actionNow.lineWidth = this.brush.lineWidth;
       this.actionNow.addPoint(mousePoint);
+      this.brush.setBefore(mousePoint);
     }
   }
 
@@ -84,6 +85,16 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
       this.tmpCtx.moveTo(mousePoint.x,mousePoint.y);
       this.tmpCtx.lineTo(beforePoint.x,beforePoint.y);
       this.tmpCtx.stroke();
+
+      //先端の○
+      if(this.brush.lineWidth != 1){
+        this.tmpCtx.fillStyle = this.brush.getColor();
+        this.tmpCtx.beginPath();
+        this.tmpCtx.lineWidth = 1;
+        this.tmpCtx.arc(beforePoint.x, beforePoint.y,(this.brush.lineWidth/2.0),0,Math.PI*2,true);
+        this.tmpCtx.fill();
+        this.tmpCtx.stroke(); 
+      }
     }
     //前の場所を記録
     this.brush.setBefore(mousePoint);
@@ -98,6 +109,9 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
       this.actionNow.setActionType(ActionType.WRITE)
       // 一筆をストリームへ流す
       this.connectService.sendAction(this.actionNow);
+      //入力中の画面を消去
+      //TODO actionNowのstrokeがwss経由で到着するのが遅れた場合画面がちらつく
+      this.tmpCtx.clearRect(0, 0, this.tmpCanvas.width, this.tmpCanvas.height);
     } 
   }
 
@@ -136,28 +150,41 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
     tmpCanvas: HTMLCanvasElement,
     tmpCtx: CanvasRenderingContext2D,
     action: Action){
-      switch(action.actionType){
-        case ActionType.WRITE:
-          action.pairLines().map(pair =>{ 
-            const pre = pair[0];
-            const suc = pair[1];
-            //console.log(pre,suc);
-            mainCtx.strokeStyle = action.color.getCanvasString();
-            mainCtx.lineWidth = action.lineWidth;
-            mainCtx.beginPath();
-            mainCtx.moveTo(pre.x,pre.y);
-            mainCtx.lineTo(suc.x,suc.y);
-            mainCtx.stroke(); 
-          })
-          break;
-        case ActionType.CLEAR:
-          mainCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
-          break;
-        default:
-          break;
-      }
-      //入力中の画面を削除
-      tmpCtx.clearRect(0, 0, tmpCanvas.width, tmpCanvas.height);
+    switch(action.actionType){
+      case ActionType.WRITE:
+        this.execDrawLine(mainCtx,action);
+        break;
+      case ActionType.CLEAR:
+        //メインキャンバス削除
+        mainCtx.clearRect(0, 0, mainCanvas.width, mainCanvas.height);
+        break;
+      default:
+        break;
+    }
+  }
+
+  private execDrawLine(targetCtx: CanvasRenderingContext2D, action: Action){
+    targetCtx.strokeStyle = action.color.getCanvasString();
+    targetCtx.lineWidth = action.lineWidth;
+    targetCtx.beginPath();
+    action.pairLines().map( pair => {
+      const pre = pair[0]; 
+      const suc = pair[1]; 
+      targetCtx.moveTo(pre.x,pre.y);
+      targetCtx.lineTo(suc.x,suc.y);
+    });
+    targetCtx.stroke(); 
+    console.log(action.lineWidth)
+    if(action.lineWidth != 1){
+      action.line.map(p => {
+        targetCtx.fillStyle = action.color.getCanvasString();
+        targetCtx.beginPath();
+        targetCtx.lineWidth = 1;
+        targetCtx.arc(p.x,p.y,(action.lineWidth/2.0),0,Math.PI*2,true);
+        targetCtx.fill();
+        targetCtx.stroke(); 
+      });
+    }
   }
 
   

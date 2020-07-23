@@ -56,8 +56,8 @@ export class Action{
   }
   //[0,1,2,3] -> [(0,1),(1,2),(2,3)]
   public pairLines(){
-    const pres = this.line.slice(1);
-    const sucs = this.line.slice(0,-1);
+    const pres = this.line.slice(0,-1);
+    const sucs = this.line.slice(1);
     return pres.map(function(e,i){
       return [e, sucs[i]];
     });
@@ -90,6 +90,7 @@ export class Brush{
   public lineWidth: number;
   constructor(){
     this.color = new Color(0,0,0);
+    this.lineWidth = 1;
   }
   public putIn(p:Point){
     this.start = p; 
