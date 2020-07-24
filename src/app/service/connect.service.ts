@@ -44,6 +44,20 @@ export class ConnectService {
       })
       );
   }
+  //annouce用のストリームを生成
+  public announceStream(){
+    return this.webStream.pipe(
+      map(v => {
+        return this.shapeAction(v);
+      }),
+      filter(v => v.actionType === ActionType.ANNOUNCE),
+      //for debug 
+      map(v =>{
+        console.log("recieved announce packet");
+        return v
+      })
+      );
+  }
 
   //ストリームのjsonをactionに変換
   private shapeAction(v:ActionPacket){
@@ -59,6 +73,9 @@ export class ConnectService {
       case ActionType.CLEAR:
         break;
       case ActionType.OPERATION:
+        st.message = v.message;
+        break;
+      case ActionType.ANNOUNCE:
         st.message = v.message;
         break;
       default:

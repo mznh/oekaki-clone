@@ -1,19 +1,18 @@
-<p>canvas works!</p>
-
 <div class="canvas-tool">
   <div class="mainCanvas">
     <canvas #canvasField id="main-canvas"[width]="CANVAS_SIZE_WIDTH" [height]="CANVAS_SIZE_HEIGHT"></canvas>
     <canvas #temporaryField id="tmp-canvas" [width]="CANVAS_SIZE_WIDTH" [height]="CANVAS_SIZE_HEIGHT"></canvas>
   </div>
   <div class="mainTool">
-    <button mat-button (click)="clearCanvas()">全消し</button>
     <button mat-button (click)="changeColor(255,0,0)">赤</button>
     <button mat-button (click)="changeColor(255,255,0)">黄</button>
-    <button mat-button (click)="changeColor(0,255,0)">緑</button>
+    <button mat-button (click)="changeColor(0,225,0)">緑</button>
     <button mat-button (click)="changeColor(0,0,255)">青</button>
     <button mat-button (click)="changeColor(0,0,0)">黒</button>
+    <div>線の太さ</div>
     <button mat-button (click)="changeLineWidth(1)">1</button>
     <button mat-button (click)="changeLineWidth(10)">10</button>
     <button mat-button (click)="changeLineWidth(50)">50</button>
+    <button mat-button (click)="clearCanvas()">全消し</button>
   </div>
 </div>

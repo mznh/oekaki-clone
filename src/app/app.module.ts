@@ -9,13 +9,15 @@ import { CanvasComponent } from './canvas/canvas.component';
 import { ConnectService } from './service/connect.service';
 import { Paint, Action, Point, Color, Brush } from './models/action';
 import { ChatComponent } from './chat/chat.component';
+import { InfoBannerComponent } from './info-banner/info-banner.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     CanvasComponent,
-    ChatComponent
+    ChatComponent,
+    InfoBannerComponent
   ],
   imports: [
     BrowserModule,

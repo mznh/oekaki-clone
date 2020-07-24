@@ -22,7 +22,7 @@ export class Point{
 }
 
 
-export const enum ActionType{ WRITE, CLEAR, UNDO, REDO, OPERATION }
+export const enum ActionType{ WRITE, CLEAR, UNDO, REDO, OPERATION, ANNOUNCE }
 
 export interface ActionPacket{
   actionType?: ActionType,
