@@ -10,6 +10,7 @@ import { ConnectService } from './service/connect.service';
 import { Paint, Action, Point, Color, Brush } from './models/action';
 import { ChatComponent } from './chat/chat.component';
 import { InfoBannerComponent } from './info-banner/info-banner.component';
+import { GameScreenComponent } from './game-screen/game-screen.component';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { InfoBannerComponent } from './info-banner/info-banner.component';
     AppComponent,
     CanvasComponent,
     ChatComponent,
-    InfoBannerComponent
+    InfoBannerComponent,
+    GameScreenComponent
   ],
   imports: [
     BrowserModule,
