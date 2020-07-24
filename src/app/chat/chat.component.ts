@@ -39,7 +39,11 @@ export class ChatComponent implements OnInit {
     const inputAnswer = elm.value;
     console.log(inputAnswer);
     elm.value = "";
-    this.connectService.sendAction(new Action(inputAnswer));
+    let action = new Action();
+    action.actionType = ActionType.OPERATION;
+    action.message = inputAnswer
+
+    this.connectService.sendAction(action);
   }
 
 }
