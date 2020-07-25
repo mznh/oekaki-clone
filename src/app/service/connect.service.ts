@@ -37,12 +37,12 @@ export class ConnectService {
         return this.shapeAction(v);
       }),
       filter(v => v.actionType === ActionType.OPERATION),
-      //for debug 
+      //for debug
       map(v =>{
         console.log("recieved operate packet");
         return v
       })
-      );
+    );
   }
   //annouce用のストリームを生成
   public announceStream(){
@@ -54,6 +54,17 @@ export class ConnectService {
       //for debug 
       map(v =>{
         console.log("recieved announce packet");
+        return v
+      })
+      );
+  }
+  //chat用のストリームを生成
+  public chatStream(){
+    return this.actionStream().pipe(
+      filter(v => v.actionType === ActionType.CHAT),
+      //for debug 
+      map(v =>{
+        console.log("recieved chat packet");
         return v
       })
       );
@@ -78,7 +89,11 @@ export class ConnectService {
       case ActionType.ANNOUNCE:
         st.message = v.message;
         break;
+      case ActionType.CHAT:
+        st.message = v.message;
+        break;
       default:
+        console.log("catch unknown packet");
         break;
     }
     console.log(st);

@@ -12,16 +12,23 @@ import { Paint, Action , Point, Color, Brush,ActionType } from '../models/action
 export class InfoBannerComponent implements OnInit {
   public announceStream: Observable<Action>;
   public announceText: string
+  public timerText: string
 
   constructor(private connectService: ConnectService) { 
     this.announceStream = connectService.announceStream();
     this.announceText = "";
+    this.timerText = "";
   }
 
   ngOnInit(): void {
     this.announceStream.subscribe(
       act => {
-        this.announceText = act.message;
+        const timerCheck = act.message.match(/^timer:(.*)$/);
+        if(timerCheck){
+          this.timerText = timerCheck[1];
+        }else{
+          this.announceText = act.message;
+        }
     });
   }
 

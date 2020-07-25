@@ -12,17 +12,17 @@ import { Paint, Action , Point, Color, Brush,ActionType } from '../models/action
 })
 export class ChatComponent implements OnInit {
   @ViewChild('chatInput') inputForm; // 
-  public operationStream: Observable<Action>;
+  public chatStream: Observable<Action>;
   public chatLog : string[];
 
 
   constructor(private connectService: ConnectService) { 
-    this.operationStream = connectService.operateStream();
+    this.chatStream = connectService.chatStream();
     this.chatLog = ["text field"];
   }
 
   ngOnInit(): void {
-    this.operationStream.subscribe(
+    this.chatStream.subscribe(
       msg =>{
         console.log("recieved message");
         console.log(msg);
@@ -40,7 +40,7 @@ export class ChatComponent implements OnInit {
     console.log(inputAnswer);
     elm.value = "";
     let action = new Action();
-    action.actionType = ActionType.OPERATION;
+    action.actionType = ActionType.CHAT;
     action.message = inputAnswer
 
     this.connectService.sendAction(action);
