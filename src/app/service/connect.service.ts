@@ -90,6 +90,7 @@ export class ConnectService {
         st.message = v.message;
         break;
       case ActionType.CHAT:
+        st.userName = v.userName;
         st.message = v.message;
         break;
       default:

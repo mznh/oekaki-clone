@@ -16,7 +16,7 @@ export class ChatComponent implements OnInit {
   @ViewChild('chatInput') inputForm; // 
   @ViewChild('chatLogInnerField') chatLogField; // 
   public chatStream: Observable<Action>;
-  public chatLog : string[];
+  public chatLog : Action[];
 
   constructor(private connectService: ConnectService) { 
     this.chatStream = connectService.chatStream();
@@ -29,7 +29,7 @@ export class ChatComponent implements OnInit {
         console.log("recieved message");
         console.log(msg);
         if(!msg.message.match(/^[ 　]*$/)){
-          this.chatLog.push(msg.message);
+          this.chatLog.push(msg);
         }
       }
     );

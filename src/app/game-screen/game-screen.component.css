@@ -1,8 +1,8 @@
 
 .game-screen {
   display: grid;
-  grid-template-rows: 70px 500px;
-  grid-template-columns: 620px 200px;
+  grid-template-rows: 70px 400px;
+  grid-template-columns: 620px 210px;
 
 }
 app-info-banner {

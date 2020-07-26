@@ -1,12 +1,18 @@
 <div #chatLogField class="chat-message-field">
   <div #chatLogInnerField class="chat-message-inner-field">
     <div *ngFor="let msg of chatLog" class="chat-message">
-      {{msg}}
+      <div class="chat-message-user-name">
+        {{msg.userName}} の発言
+      </div>
+      <div class="chat-message-message">
+        {{msg.message}}
+      </div>
     </div>
   </div>
 </div>
 <div class="chat-input-form">
   <input matInput #chatInput 
     type="text" 
+    class="chat-input"
     (keyup.enter)="getEnter()">
 </div>

@@ -10,10 +10,12 @@
     <button mat-button (click)="changeColor(0,0,255)">青</button>
     <button mat-button (click)="changeColor(0,0,0)">黒</button>
     <button mat-button (click)="changeColor(255,255,255)">白</button>
+    <button mat-button (click)="clearCanvas()">全消し</button>
     <div>線の太さ</div>
     <button mat-button (click)="changeLineWidth(1)">1</button>
+    <button mat-button (click)="changeLineWidth(5)">5</button>
     <button mat-button (click)="changeLineWidth(10)">10</button>
+    <button mat-button (click)="changeLineWidth(20)">20</button>
     <button mat-button (click)="changeLineWidth(50)">50</button>
-    <button mat-button (click)="clearCanvas()">全消し</button>
   </div>
 </div>

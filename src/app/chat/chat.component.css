@@ -1,6 +1,9 @@
 .chat-input-form {
   margin: 20px 0px 0px 10px;
 }
+.chat-input {
+  width: 195px;
+}
 .chat-message {
   border: 1px #ddd solid;
 }

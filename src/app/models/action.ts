@@ -29,6 +29,7 @@ export interface ActionPacket{
   line?: {x:number, y:number}[],
   lineWidth?: number,
   color?: Color, // ここも後々websocketに合わせて修正
+  userName?: string,
   message?: string
 }
 
@@ -37,6 +38,7 @@ export class Action{
   public line: Point[];
   public lineWidth: number;
   public color: Color;
+  public userName: string;
   public message: string;
   constructor(msg? : string){
     this.line = [];

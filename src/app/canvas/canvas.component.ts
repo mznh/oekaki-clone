@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, AfterViewInit, DoCheck, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, OnChanges, AfterViewInit, ViewChild, HostListener } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { Observable, Subject } from 'rxjs';
 import { Paint, Action , Point, Color, Brush,ActionType } from '../models/action';
@@ -11,7 +11,7 @@ import { ConnectService } from '../service/connect.service';
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css']
 })
-export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
+export class CanvasComponent implements OnInit,AfterViewInit {
   @ViewChild('canvasField') myCanvasComp; // 
   @ViewChild('temporaryField') tmpCanvasComp; //
   //メインキャンバス
@@ -120,9 +120,9 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
     this.canvasStream.subscribe(
       //action毎の処理
       action => { return this.execAction(this.canvas,this.ctx,this.tmpCanvas,this.tmpCtx,action);},
-    error =>{
-      console.log(error);
-    }
+      error =>{
+        console.log(error);
+      }
     );
   }
 
@@ -131,9 +131,6 @@ export class CanvasComponent implements OnInit,AfterViewInit,DoCheck {
     //this.paintCanvas();
   }
 
-  ngDoCheck(){
-    //this.paintCanvas();
-  }
 
   ngAfterViewInit(){
     // canvasの要素を取得

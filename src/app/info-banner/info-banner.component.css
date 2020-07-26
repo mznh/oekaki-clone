@@ -17,7 +17,7 @@
 .timer-banner {
   grid-row: 1 / 2;
   grid-column: 2 / 3;
-  width: 100px;
+  width: 200px;
   border: 1px #ccc solid;
   margin: 0px 0px 0px 10px;
 }

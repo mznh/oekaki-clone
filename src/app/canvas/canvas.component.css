@@ -25,10 +25,10 @@
 
   display: grid;
   grid-template-rows: 40px;
-  grid-template-columns: repeat(6,64px);
+  grid-template-columns: repeat(7,64px);
 
 	position: relative;
-  margin: 0px 20px 20px 10px;
+  margin: 0px 20px 20px 20px;
 }
 .mainTool button{
   width: 60px;
