@@ -1,6 +1,8 @@
-<div class="chat-message-field">
-  <div *ngFor="let msg of chatLog">
-    {{msg}}
+<div #chatLogField class="chat-message-field">
+  <div #chatLogInnerField class="chat-message-inner-field">
+    <div *ngFor="let msg of chatLog" class="chat-message">
+      {{msg}}
+    </div>
   </div>
 </div>
 <div class="chat-input-form">

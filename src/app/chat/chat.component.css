@@ -1,10 +1,21 @@
 .chat-input-form {
   margin: 20px 0px 0px 10px;
 }
+.chat-message {
+  border: 1px #ddd solid;
+}
 
 .chat-message-field {
   width: 200px;
   height: 400px;
   margin: 0px 0px 0px 10px;
   border: 1px #ccc solid;
+  overflow-y: scroll;
+}
+
+.chat-message-inner-field {
+}
+
+.chat-message-log {
+  font-size: 30px;
 }

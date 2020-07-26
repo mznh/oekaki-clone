@@ -1,6 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+//import { CdkScrollableModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -25,6 +27,7 @@ import { GameScreenComponent } from './game-screen/game-screen.component';
     BrowserModule,
     AppRoutingModule,
     MatButtonModule,
+    ScrollingModule,
     BrowserAnimationsModule
   ],
   providers: [],
