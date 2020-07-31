@@ -13,11 +13,13 @@ import { Paint, Action, Point, Color, Brush } from './models/action';
 import { ChatComponent } from './chat/chat.component';
 import { InfoBannerComponent } from './info-banner/info-banner.component';
 import { GameScreenComponent } from './game-screen/game-screen.component';
+import { LobbyPageComponent } from './lobby-page/lobby-page.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
+    LobbyPageComponent,
     CanvasComponent,
     ChatComponent,
     InfoBannerComponent,
