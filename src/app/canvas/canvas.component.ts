@@ -80,21 +80,18 @@ export class CanvasComponent implements OnInit,AfterViewInit {
       this.actionNow.addPoint(mousePoint);
       const beforePoint = this.brush.before;
       this.tmpCtx.strokeStyle = this.brush.getColor();
+      this.tmpCtx.lineJoin = "round"
+      this.tmpCtx.lineCap = "round"
       this.tmpCtx.lineWidth = this.brush.lineWidth;
+      this.tmpCtx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.tmpCtx.beginPath();
-      this.tmpCtx.moveTo(mousePoint.x,mousePoint.y);
-      this.tmpCtx.lineTo(beforePoint.x,beforePoint.y);
+      this.actionNow.pairLines().map( pair => {
+        const pre = pair[0]; 
+        const suc = pair[1]; 
+        this.tmpCtx.moveTo(pre.x,pre.y);
+        this.tmpCtx.lineTo(suc.x,suc.y);
+      });
       this.tmpCtx.stroke();
-
-      //先端の○
-      if(this.brush.lineWidth != 1){
-        this.tmpCtx.fillStyle = this.brush.getColor();
-        this.tmpCtx.beginPath();
-        this.tmpCtx.lineWidth = 1;
-        this.tmpCtx.arc(beforePoint.x, beforePoint.y,(this.brush.lineWidth/2.0),0,Math.PI*2,true);
-        this.tmpCtx.fill();
-        this.tmpCtx.stroke(); 
-      }
     }
     //前の場所を記録
     this.brush.setBefore(mousePoint);
@@ -162,6 +159,8 @@ export class CanvasComponent implements OnInit,AfterViewInit {
 
   private execDrawLine(targetCtx: CanvasRenderingContext2D, action: Action){
     targetCtx.strokeStyle = action.color.getCanvasString();
+    targetCtx.lineJoin = "round"
+    targetCtx.lineCap = "round"
     targetCtx.lineWidth = action.lineWidth;
     targetCtx.beginPath();
     action.pairLines().map( pair => {
@@ -171,17 +170,6 @@ export class CanvasComponent implements OnInit,AfterViewInit {
       targetCtx.lineTo(suc.x,suc.y);
     });
     targetCtx.stroke(); 
-    console.log(action.lineWidth)
-    if(action.lineWidth != 1){
-      action.line.map(p => {
-        targetCtx.fillStyle = action.color.getCanvasString();
-        targetCtx.beginPath();
-        targetCtx.lineWidth = 1;
-        targetCtx.arc(p.x,p.y,(action.lineWidth/2.0),0,Math.PI*2,true);
-        targetCtx.fill();
-        targetCtx.stroke(); 
-      });
-    }
   }
 
   
@@ -192,15 +180,24 @@ export class CanvasComponent implements OnInit,AfterViewInit {
     st.setActionType(ActionType.CLEAR);
     this.connectService.sendAction(st);
   }
-  public changeColor(r:number, g:number, b:number){
+  public changeColor(r:number, g:number, b:number, a?:number){
     console.log("change color");
-    const c = new Color(r,g,b);
+    let c = null
+    if(a){
+      c = new Color(r,g,b,a);
+    } else {
+      c = new Color(r,g,b,this.brush.getAlpha());
+    }
     console.log(c);
     this.brush.setColor(c);
+  }
+  public changeAlpha(a:number){
+    console.log("change alpha");
+    console.log(a);
+    this.brush.setAlpha(a);
   }
   public changeLineWidth(n: number){
     console.log("change lineWidth");
     this.brush.lineWidth = n;
   }
-
 }
