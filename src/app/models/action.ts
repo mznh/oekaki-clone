@@ -2,13 +2,15 @@ export class Color{
   public red: number;
   public green: number;
   public blue: number;
-  constructor(red:number, green:number, blue:number){
+  public alpha: number;
+  constructor(red:number, green:number, blue:number, alpha:number){
     this.red = red;
     this.green = green;
     this.blue = blue;
+    this.alpha = alpha;
   }
   public getCanvasString(){
-    return `rgb(${this.red},${this.green},${this.blue})`;
+    return `rgba(${this.red},${this.green},${this.blue},${this.alpha / 255.0})`;
   }
 }
 
@@ -91,7 +93,7 @@ export class Brush{
   public color: Color;
   public lineWidth: number;
   constructor(){
-    this.color = new Color(0,0,0);
+    this.color = new Color(0,0,0,255);
     this.lineWidth = 1;
   }
   public putIn(p:Point){
@@ -110,6 +112,17 @@ export class Brush{
   }
   public getColor(){
     return this.color.getCanvasString();
+  }
+  public getAlpha(){
+    //もっと汎用的なgetColorVal(c)とかにするか、下のgetColorObjectを使う
+    return this.color.alpha;
+  }
+  public getColorObject(){
+    return this.color;
+  }
+  public setAlpha(a:number){
+    //publicだから直接代入してるけどSetterを使うべき？
+    this.color.alpha = a;
   }
 }
 

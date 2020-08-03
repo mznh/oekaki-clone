@@ -77,7 +77,7 @@ export class ConnectService {
     switch(v.actionType){
       case ActionType.WRITE:
         v.line.map(p => { st.addPoint(new Point(p.x,p.y)) });
-        st.color = new Color(v.color.red,v.color.green,v.color.blue);
+        st.color = new Color(v.color.red,v.color.green,v.color.blue,v.color.alpha);
         st.lineWidth = v.lineWidth;
         console.log(st);
         break;
