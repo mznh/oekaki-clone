@@ -1,0 +1,19 @@
+
+.player-panel{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: 150px;
+  margin: 5px 20px;
+}
+
+.player-tile{
+  width:100px;
+  height:150px;
+  margin: 0px;
+  border: 1px #000 solid;
+}
+.player-tile-name{
+  word-wrap: break-word;
+}
+.player-tile-score{
+}

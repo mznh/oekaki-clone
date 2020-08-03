@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-//import { CdkScrollableModule, CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,6 +13,7 @@ import { ChatComponent } from './chat/chat.component';
 import { InfoBannerComponent } from './info-banner/info-banner.component';
 import { GameScreenComponent } from './game-screen/game-screen.component';
 import { LobbyPageComponent } from './lobby-page/lobby-page.component';
+import { PlayerPanelComponent } from './player-panel/player-panel.component';
 
 
 @NgModule({
@@ -23,7 +23,8 @@ import { LobbyPageComponent } from './lobby-page/lobby-page.component';
     CanvasComponent,
     ChatComponent,
     InfoBannerComponent,
-    GameScreenComponent
+    GameScreenComponent,
+    PlayerPanelComponent
   ],
   imports: [
     BrowserModule,

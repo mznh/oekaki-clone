@@ -31,7 +31,7 @@ export class ConnectService {
   }
 
   //operation用のストリームを生成
-  public operateStream(){
+  public operationStream(){
     return this.webStream.pipe(
       map(v => {
         return this.shapeAction(v);
