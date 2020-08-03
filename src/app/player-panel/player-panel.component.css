@@ -3,11 +3,11 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: 150px;
-  margin: 5px 20px;
+  margin-top: 5px;
+  margin-left: 20px;
 }
 
 .player-tile{
-  width:100px;
   height:150px;
   margin: 0px;
   border: 1px #000 solid;
