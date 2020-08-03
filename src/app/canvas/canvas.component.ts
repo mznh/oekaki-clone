@@ -180,20 +180,14 @@ export class CanvasComponent implements OnInit,AfterViewInit {
     st.setActionType(ActionType.CLEAR);
     this.connectService.sendAction(st);
   }
-  public changeColor(r:number, g:number, b:number, a:number=-1){
+  public changeColor(r:number, g:number, b:number, a?:number){
     console.log("change color");
     let c = null
-    if(a==-1){
-      c = new Color(r,g,b,this.brush.getAlpha());
-    } else {
+    if(a){
       c = new Color(r,g,b,a);
+    } else {
+      c = new Color(r,g,b,this.brush.getAlpha());
     }
-    console.log(c);
-    this.brush.setColor(c);
-  }
-  public changeColorAlpha(r:number, g:number, b:number, a:number){
-    console.log("change color alpha");
-    const c = new Color(r,g,b,a);
     console.log(c);
     this.brush.setColor(c);
   }
@@ -206,5 +200,4 @@ export class CanvasComponent implements OnInit,AfterViewInit {
     console.log("change lineWidth");
     this.brush.lineWidth = n;
   }
-
 }
